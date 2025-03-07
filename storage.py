@@ -26,7 +26,7 @@ except Exception:
     container_client = blob_service_client.create_container(CONTAINER_NAME)
     
 
-def getBlobName(filename: str) -> json:
+def getBlobName(filename: str) -> dict:
     ext = os.path.splitext(filename)[1]
     unique_filename = f"{uuid.uuid4()}{ext}"
     blob_name = f"{IMAGE_FOLDER}/{unique_filename}"
