@@ -1,6 +1,8 @@
-from fastapi import FastAPI,APIRouter, UploadFile, File, HTTPException
-import storage
-from models import LabelUpload
+from fastapi import APIRouter, UploadFile, File
+
+import app.storage as storage
+from app.models import LabelUpload
+
 app = APIRouter(
     prefix="/upload",
     tags=["generic"]
