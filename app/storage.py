@@ -1,12 +1,12 @@
 import os
-from fastapi import FastAPI, UploadFile, File, HTTPException
+from fastapi import UploadFile, File, HTTPException
 
 from dotenv import load_dotenv
 import os
 import uuid
 import json
 from azure.storage.blob import BlobServiceClient
-import models
+from app import models
 
 load_dotenv()
 
@@ -14,6 +14,7 @@ AZURE_CONNECTION_STRING = os.getenv("AZURE_STORAGE_CONNECTION_STRING")
 CONTAINER_NAME = os.getenv("AZURE_CONTAINER_NAME")
 IMAGE_FOLDER = os.getenv("IMAGE_FOLDER")
 LABEL_FOLDER = os.getenv("LABEL_FOLDER")
+
 
 # Initialize the BlobServiceClient
 blob_service_client = BlobServiceClient.from_connection_string(AZURE_CONNECTION_STRING)
@@ -31,10 +32,12 @@ def getBlobName(filename: str) -> dict:
     unique_filename = f"{uuid.uuid4()}{ext}"
     blob_name = f"{IMAGE_FOLDER}/{unique_filename}"
     
-    return {
-        filename:unique_filename,
-        blob_name:blob_name
+    result = {
+        "filename": unique_filename,
+        "blob_name": blob_name
     }
+    return result
+
 
 async def uploadImage( filename:str, blob_name:str,image: UploadFile=File(...)) -> str:
     try:

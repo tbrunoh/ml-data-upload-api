@@ -11,8 +11,11 @@ app = APIRouter(
 
 @app.post("/image/")
 async def upload_image(image: UploadFile = File(...)):
-    data = await storage.getBlobName()
-    _ = await storage.uploadImage(data.filename,data.blob_name,image)
+    data = storage.getBlobName(image.filename  )
+    filename = await storage.uploadImage(data["filename"], data["blob_name"], image)
+    return {
+        "filename":filename
+    }
     
 @app.post("/labels/")
 async def upload_labels(label_upload: LabelUpload):
