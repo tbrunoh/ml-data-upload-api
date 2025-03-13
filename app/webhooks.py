@@ -10,4 +10,4 @@ app = APIRouter(
 @app.post("/label-studio")
 async def receive_webhook(payload: dict):
     print(payload)
-    return {"message": "Webhook received"}
+    return payload
