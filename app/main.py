@@ -14,7 +14,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 import app.api as api
-
+import app.webhooks as webhooks
 
 # Configure logging
 logging.basicConfig(
@@ -47,7 +47,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 app.include_router(api.app)
+app.include_router(webhooks.app)
 
 
 @app.get("/health", include_in_schema=False)
