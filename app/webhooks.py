@@ -8,7 +8,6 @@ app = APIRouter(
 
 
 @app.post("/label-studio")
-async def receive_webhook(file: UploadFile = File(...)):
-    content = await file.read()
-    print(content.decode("utf-8"))
+async def receive_webhook(payload: dict):
+    print(payload)
     return {"message": "Webhook received"}
