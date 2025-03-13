@@ -36,8 +36,7 @@ app = FastAPI(
 origins = [
     "http://localhost",
     "http://localhost:8080",
-    "http://localhost:4200",
-    "https://reservation-admin.fameveci.com"
+    "http://localhost:4200"
 ]
 
 app.add_middleware(
