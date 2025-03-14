@@ -1,7 +1,6 @@
 
 from fastapi import FastAPI, HTTPException, status,APIRouter
 from label_studio_sdk import Annotation, Task
-from label_studio_sdk.webhooks import WebhookRequest, WebhookAction
 import logging
 
 app = APIRouter(
