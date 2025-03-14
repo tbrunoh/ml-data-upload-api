@@ -14,8 +14,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 import app.api as api
-import app.webhooks as webhooks
-
+from app.webhooks import label_studio
+import a
 # Configure logging
 logging.basicConfig(
     level=os.getenv('LOG_LEVEL', 'INFO'),  # Set the logging level to INFO
@@ -48,7 +48,7 @@ app.add_middleware(
 )
 
 app.include_router(api.app)
-app.include_router(webhooks.app)
+app.include_router(label_studio.app)
 
 
 @app.get("/health", include_in_schema=False)
