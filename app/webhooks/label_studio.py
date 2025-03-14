@@ -32,7 +32,7 @@ async def receive_webhook(payload: dict):
             # Access annotation properties using the SDK model
             result = annotation.result
             lead_time = annotation.lead_time
-            created_by = annotation.created_by
+            created_by = annotation.created_username
             
             # Access task data
             task_data = task.data

@@ -15,7 +15,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 import app.api as api
 from app.webhooks import label_studio
-import a
+
 # Configure logging
 logging.basicConfig(
     level=os.getenv('LOG_LEVEL', 'INFO'),  # Set the logging level to INFO
