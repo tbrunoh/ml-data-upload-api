@@ -23,6 +23,8 @@ async def receive_webhook(payload: dict):
             annotation_data = payload.get("annotation", {})
             annotation = Annotation(annotation_data)
             
+            logger.info(f"Processing annotationV1 {annotation.id}")
+            
             # Parse the associated task
             task_data = payload.get("task", {})
             task = Task(task_data)
