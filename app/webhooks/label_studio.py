@@ -21,7 +21,7 @@ async def receive_webhook(payload: dict):
         if action == "ANNOTATION_CREATED":
             # Parse the annotation using the SDK model
             annotation_data = payload.get("annotation", {})
-            logger.log(annotation_data)
+            logger.info(annotation_data)
             annotation = Annotation(annotation_data)
             
             logger.info(f"Processing annotationV1 {annotation.id}")
