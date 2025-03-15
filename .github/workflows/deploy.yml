@@ -48,4 +48,4 @@ jobs:
             --resource-group ml-web \
             --docker-custom-image-name ${{ secrets.ACR_NAME }}.azurecr.io/${{ env.IMAGE_PREFIX }}:${{ github.sha }} \
             --docker-registry-server-url https://${{ secrets.ACR_NAME }}.azurecr.io \
-            --custom-container-health-check-url "/health"
+            --health-check-path "/health"
