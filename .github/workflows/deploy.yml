@@ -47,4 +47,5 @@ jobs:
             --name ml-training-data-api \
             --resource-group ml-web \
             --docker-custom-image-name ${{ secrets.ACR_NAME }}.azurecr.io/${{ env.IMAGE_PREFIX }}:${{ github.sha }} \
-            --docker-registry-server-url https://${{ secrets.ACR_NAME }}.azurecr.io
+            --docker-registry-server-url https://${{ secrets.ACR_NAME }}.azurecr.io \
+            --custom-container-health-check-url "/health"
