@@ -27,10 +27,15 @@ except Exception:
     container_client = blob_service_client.create_container(CONTAINER_NAME)
     
 
-def getBlobName(filename: str) -> dict:
+def getBlobName(filename: str, prefix: str = IMAGE_FOLDER, useFilename:bool=False) -> dict:
     ext = os.path.splitext(filename)[1]
-    unique_filename = f"{uuid.uuid4()}{ext}"
-    blob_name = f"{IMAGE_FOLDER}/{unique_filename}"
+    if useFilename:
+        unique_filename = filename
+    else:
+        unique_filename = f"{uuid.uuid4()}{ext}"
+    
+    # unique_filename = f"{uuid.uuid4()}{ext}"
+    blob_name = f"{prefix}/{unique_filename}"
     
     result = {
         "filename": unique_filename,
@@ -49,9 +54,9 @@ async def uploadImage( filename:str, blob_name:str,image: UploadFile=File(...)) 
     return filename
 
 
-async def uploadLabels(label:models.LabelUpload):
+async def uploadLabels(label:models.LabelUpload,prefix:str=LABEL_FOLDER):
     label_filename = f"{os.path.splitext(label.image_name)[0]}.json"
-    blob_name = f"{LABEL_FOLDER}/{label_filename}"
+    blob_name = f"{prefix}/{label_filename}"
     
     try:
         labels_json = json.dumps(label.labels)
