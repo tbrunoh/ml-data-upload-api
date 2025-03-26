@@ -32,13 +32,15 @@ async def receive_task_created(request: Request):
             task_id = task["id"]
             image_url = task["data"]["image"]
             
-            logger.info(f"taskId; {task_id}, image : {image_url}")
             
             if not task_id or not image_url:
                 logger.error("Invalid payload format")
                 continue
             
             image_name = utils.extract_image_filename(image_url)
+            
+            logger.info(f"taskId; {task_id}, image : {image_name}")
+            
             LABEL_STUDIO_URL = os.getenv("LABEL_STUDIO_URL")
             API_TOKEN = os.getenv("LABEL_STUDIO_API_TOKEN")
             if not LABEL_STUDIO_URL:
