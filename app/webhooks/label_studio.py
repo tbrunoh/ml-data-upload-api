@@ -17,8 +17,9 @@ logger = logging.getLogger(__name__)
 async def receive_task_created(request: Request):
     try:
         logger.info("Received task created webhook payload")
-        logger.info(request)
+       
         data = await request.json()
+        logger.info(data)
         task_id = data.get("id")
         image_url = data.get("data", {}).get("image")
 
