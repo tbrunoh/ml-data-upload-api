@@ -52,7 +52,9 @@ async def receive_task_created(request: Request):
             
             headers = {"Authorization": f"Token {API_TOKEN}", "Content-Type": "application/json"}
             payload = {"data": {"case_id": image_name},"project":project_id}
-
+            
+            logger.info(payload)
+            
             response = requests.patch(update_url, json=payload, headers=headers)
             logger.info(response)
             
