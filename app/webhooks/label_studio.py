@@ -10,6 +10,29 @@ app = APIRouter(
 
 logger = logging.getLogger(__name__)
 
+@app.post("/task-created")
+async def receive_task_created(payload: dict):
+    try:
+        logger.info("Received task created webhook payload")
+        logger.info(payload)
+        
+        # Your business logic here
+        # For example: process task data, update databases, etc.
+        
+        return {
+            "status": "success",
+            "message": "Task created webhook received successfully",
+            "task_id": payload.get("task", {}).get("id"),
+            "project_id": payload.get("project", {}).get("id")
+        }
+    except Exception as e:
+        logger.error(f"Error processing task created webhook: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to process task created webhook: {str(e)}"
+        )
+
+
 @app.post("/annotation-created")
 async def receive_webhook(payload: dict):
     try:
