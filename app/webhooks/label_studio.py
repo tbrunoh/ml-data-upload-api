@@ -1,7 +1,10 @@
 
-from fastapi import FastAPI, HTTPException, status,APIRouter
+from fastapi import FastAPI, HTTPException, status,APIRouter, Request
 from label_studio_sdk import Annotation, Task
 import logging
+import app.utils as utils
+import requests
+import os
 
 app = APIRouter(
     prefix="/webhooks/ls",
@@ -11,20 +14,37 @@ app = APIRouter(
 logger = logging.getLogger(__name__)
 
 @app.post("/task-created")
-async def receive_task_created(payload: dict):
+async def receive_task_created(request: Request):
     try:
         logger.info("Received task created webhook payload")
-        logger.info(payload)
+        logger.info(request)
+        data = await request.json()
+        task_id = data.get("id")
+        image_url = data.get("data", {}).get("image")
+
+        if not task_id or not image_url:
+            logger.error("Invalid payload format")
+            return {"error": "Invalid payload"}, 400
         
-        # Your business logic here
-        # For example: process task data, update databases, etc.
+        image_name = utils.extract_image_filename(image_url)
+        LABEL_STUDIO_URL = os.getenv("LABEL_STUDIO_API_URL")
+        API_TOKEN = os.getenv("LABEL_STUDIO_API_TOKEN")
+        if not LABEL_STUDIO_URL:
+            raise ValueError("LABEL_STUDIO_URL environment variable is not set")
+
+        update_url = f"{LABEL_STUDIO_URL}/api/tasks/{task_id}"
+        headers = {"Authorization": f"Token {API_TOKEN}", "Content-Type": "application/json"}
+        payload = {"data": {"case_id": image_name}}
+
+        response = requests.patch(update_url, json=payload, headers=headers)
+        logger.info(response)
         
-        return {
-            "status": "success",
-            "message": "Task created webhook received successfully",
-            "task_id": payload.get("task", {}).get("id"),
-            "project_id": payload.get("project", {}).get("id")
-        }
+        if response.status_code == 200:
+            return {"success": f"Task {task_id} updated with image_name"}
+        else:
+            return {"error": response.text}, response.status_code
+        
+        
     except Exception as e:
         logger.error(f"Error processing task created webhook: {str(e)}")
         raise HTTPException(
