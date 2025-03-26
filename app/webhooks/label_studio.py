@@ -6,12 +6,16 @@ import app.utils as utils
 import requests
 import os
 
+from dotenv import load_dotenv
+
 app = APIRouter(
     prefix="/webhooks/ls",
     tags=["Label studio webhooks"]
 )
 
 logger = logging.getLogger(__name__)
+
+load_dotenv()
 
 @app.post("/task-created")
 async def receive_task_created(request: Request):
