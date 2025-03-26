@@ -30,6 +30,7 @@ async def receive_task_created(request: Request):
             logger.info(task)
         
             task_id = task["id"]
+            project_id = task["project"]
             image_url = task["data"]["image"]
             
             
@@ -46,9 +47,9 @@ async def receive_task_created(request: Request):
             if not LABEL_STUDIO_URL:
                 raise ValueError("LABEL_STUDIO_URL environment variable is not set")
 
-            update_url = f"{LABEL_STUDIO_URL}/api/tasks/{task_id}"
+            update_url = f"{LABEL_STUDIO_URL}/api/tasks/{task_id}/"
             headers = {"Authorization": f"Token {API_TOKEN}", "Content-Type": "application/json"}
-            payload = {"data": {"case_id": image_name}}
+            payload = {"data": {"case_id": image_name},"project":project_id}
 
             response = requests.patch(update_url, json=payload, headers=headers)
             logger.info(response)
