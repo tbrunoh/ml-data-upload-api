@@ -20,35 +20,40 @@ async def receive_task_created(request: Request):
        
         data = await request.json()
         
-        logger.info(data)
+        tasks = data.get("tasks", [])
+        for task in tasks:
+            logger.info(f"Processing task: {task["id"]}")
+            logger.info(task)
         
-        task_id = data["id"]
-        image_url = data["data"]["image"]
-        
-        logger.info(f"taskId; {task_id}, image : {image_url}")
-        
-        if not task_id or not image_url:
-            logger.error("Invalid payload format")
-            return {"error": "Invalid payload"}, 400
-        
-        image_name = utils.extract_image_filename(image_url)
-        LABEL_STUDIO_URL = os.getenv("LABEL_STUDIO_API_URL")
-        API_TOKEN = os.getenv("LABEL_STUDIO_API_TOKEN")
-        if not LABEL_STUDIO_URL:
-            raise ValueError("LABEL_STUDIO_URL environment variable is not set")
+            task_id = task["id"]
+            image_url = task["data"]["image"]
+            
+            logger.info(f"taskId; {task_id}, image : {image_url}")
+            
+            if not task_id or not image_url:
+                logger.error("Invalid payload format")
+                return {"error": "Invalid payload"}, 400
+            
+            image_name = utils.extract_image_filename(image_url)
+            LABEL_STUDIO_URL = os.getenv("LABEL_STUDIO_API_URL")
+            API_TOKEN = os.getenv("LABEL_STUDIO_API_TOKEN")
+            if not LABEL_STUDIO_URL:
+                raise ValueError("LABEL_STUDIO_URL environment variable is not set")
 
-        update_url = f"{LABEL_STUDIO_URL}/api/tasks/{task_id}"
-        headers = {"Authorization": f"Token {API_TOKEN}", "Content-Type": "application/json"}
-        payload = {"data": {"case_id": image_name}}
+            update_url = f"{LABEL_STUDIO_URL}/api/tasks/{task_id}"
+            headers = {"Authorization": f"Token {API_TOKEN}", "Content-Type": "application/json"}
+            payload = {"data": {"case_id": image_name}}
 
-        response = requests.patch(update_url, json=payload, headers=headers)
-        logger.info(response)
-        
-        if response.status_code == 200:
-            return {"success": f"Task {task_id} updated with image_name"}
-        else:
-            return {"error": response.text}, response.status_code
-        
+            response = requests.patch(update_url, json=payload, headers=headers)
+            logger.info(response)
+            
+            if response.status_code == 200:
+                logger.info(f"Task {task_id} updated with image_name")
+                
+            else:
+                logger.error(f"Failed to update task {task_id}: {response.text}, code {response.status_code}")
+            
+        return {"success": f"Task {task_id} updated with image_name"}
         
     except Exception as e:
         logger.error(f"Error processing task created webhook: {str(e)}")
