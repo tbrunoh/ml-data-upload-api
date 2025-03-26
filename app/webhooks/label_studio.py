@@ -51,11 +51,11 @@ async def receive_task_created(request: Request):
             logger.info(f"LABEL TASK PATCH URL {update_url}")
             
             headers = {"Authorization": f"Token {API_TOKEN}", "Content-Type": "application/json"}
-            payload = {"data": {"case_id": image_name},"project":project_id}
+            task['data']['case_id'] = image_name
             
-            logger.info(payload)
+            logger.info(task)
             
-            response = requests.patch(update_url, json=payload, headers=headers)
+            response = requests.patch(update_url, json=task, headers=headers)
             logger.info(response)
             
             if response.status_code == 200:
