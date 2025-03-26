@@ -22,8 +22,10 @@ async def receive_task_created(request: Request):
         
         task_id = data["id"]
         image_url = data["data"]["image"]
-
+        
+        logger.info(data)
         logger.info(f"taskId; {task_id}, image : {image_url}")
+        
         if not task_id or not image_url:
             logger.error("Invalid payload format")
             return {"error": "Invalid payload"}, 400
