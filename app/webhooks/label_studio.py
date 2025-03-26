@@ -48,6 +48,8 @@ async def receive_task_created(request: Request):
                 raise ValueError("LABEL_STUDIO_URL environment variable is not set")
 
             update_url = f"{LABEL_STUDIO_URL}/api/tasks/{task_id}/"
+            logger.info(f"LABEL TASK PATCH URL {update_url}")
+            
             headers = {"Authorization": f"Token {API_TOKEN}", "Content-Type": "application/json"}
             payload = {"data": {"case_id": image_name},"project":project_id}
 
