@@ -19,10 +19,11 @@ async def receive_task_created(request: Request):
         logger.info("Received task created webhook payload")
        
         data = await request.json()
-        logger.info(data)
+        
         task_id = data.get("id")
         image_url = data.get("data", {}).get("image")
 
+        logger.info(f"taskId; {task_id}, image : {image_url}")
         if not task_id or not image_url:
             logger.error("Invalid payload format")
             return {"error": "Invalid payload"}, 400
