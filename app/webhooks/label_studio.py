@@ -36,10 +36,10 @@ async def receive_task_created(request: Request):
             
             if not task_id or not image_url:
                 logger.error("Invalid payload format")
-                return {"error": "Invalid payload"}, 400
+                continue
             
             image_name = utils.extract_image_filename(image_url)
-            LABEL_STUDIO_URL = os.getenv("LABEL_STUDIO_API_URL")
+            LABEL_STUDIO_URL = os.getenv("LABEL_STUDIO_URL")
             API_TOKEN = os.getenv("LABEL_STUDIO_API_TOKEN")
             if not LABEL_STUDIO_URL:
                 raise ValueError("LABEL_STUDIO_URL environment variable is not set")
