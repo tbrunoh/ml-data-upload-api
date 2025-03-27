@@ -55,7 +55,7 @@ async def receive_task_created(request: Request):
             
             logger.info(task)
             
-            response = requests.patch(update_url, json=task, headers=headers)
+            response = requests.patch(url=update_url, json=task, headers=headers)
             logger.info(response)
             
             if response.status_code == 200:
