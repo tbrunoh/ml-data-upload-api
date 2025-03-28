@@ -7,6 +7,7 @@ import requests
 import os
 
 from dotenv import load_dotenv
+import asyncio
 
 app = APIRouter(
     prefix="/webhooks/ls",
@@ -54,7 +55,7 @@ async def receive_task_created(request: Request):
             task['data']['case_id'] = image_name
             
             logger.info(task)
-            
+            await asyncio.sleep(15)
             response = requests.patch(url=update_url, json=task, headers=headers)
             logger.info(response)
             
