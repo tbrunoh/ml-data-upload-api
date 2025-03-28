@@ -64,7 +64,7 @@ async def receive_task_created(request: Request):
             else:
                 logger.error(f"Failed to update task {task_id}: {response.text}, code {response.status_code}")
             
-        return {"success": f"Task {task_id} updated with image_name"}
+        # return {"success": f"Task {task_id} updated with image_name"}
         
     except Exception as e:
         logger.error(f"Error processing task created webhook: {str(e)}")
