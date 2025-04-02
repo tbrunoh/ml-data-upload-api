@@ -16,6 +16,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import app.api as api
 import app.scin as scin
 from app.webhooks import label_studio
+import app.mst as mst
 
 # Configure logging
 logging.basicConfig(
@@ -51,6 +52,7 @@ app.add_middleware(
 app.include_router(api.app)
 app.include_router(label_studio.app)
 app.include_router(scin.app)
+app.include_router(mst.app)
 
 
 @app.get("/health", include_in_schema=False)
