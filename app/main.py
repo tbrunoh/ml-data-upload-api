@@ -39,7 +39,8 @@ origins = [
     "http://localhost",
     "http://localhost:8080",
     "http://localhost:4200",
-    "http://localhost:3000"
+    "http://localhost:3000",
+    "https://ml-ai-st-ui-a3chcug0c6g9a5b6.centralus-01.azurewebsites.net",  # Add your Next.js app's domain here
 ]
 
 app.add_middleware(
