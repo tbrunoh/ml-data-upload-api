@@ -22,7 +22,14 @@ async def upload_image(image: UploadFile = File(...)):
     filename = await storage.uploadImage(data["filename"], data["blob_name"], image)
     return {
         "filename":filename
-    }    
+    }
+@app.post("/test/")
+async def upload_image(image: UploadFile = File(...)):
+    data = storage.getBlobName(image.filename ,"test",False )
+    filename = await storage.uploadImage(data["filename"], data["blob_name"], image)
+    return {
+        "filename":filename
+    } 
 # @app.post("/labels/")
 # async def upload_labels(label_upload: LabelUpload):
 #     _ = await storage.uploadLabels(label_upload)
