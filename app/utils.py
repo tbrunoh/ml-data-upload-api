@@ -1,11 +1,8 @@
 import re
 import cv2
-import logging
 from fastapi import UploadFile
 import numpy as np
 
-# Configure logging
-logging.basicConfig(level=print)
 
 def extract_image_filename(image_url: str, ext:str = "png"):
     match = re.search(rf"^[^-]+-(-*\d+)\.{ext}", image_url)
@@ -69,5 +66,5 @@ def process_image_with_face(image_file: UploadFile, output_file: UploadFile, siz
         output_file.file.seek(0)
 
     except Exception as e:
-        logging.error(f"Error processing image: {e}")
+        print(f"Error processing image: {e}")
         raise
