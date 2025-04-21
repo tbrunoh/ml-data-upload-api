@@ -2,12 +2,14 @@
 from fastapi import FastAPI, HTTPException, status,APIRouter, Request
 from label_studio_sdk import Annotation, Task
 import logging
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import app.utils as utils
 import requests
 import os
 
 from dotenv import load_dotenv
 import asyncio
+import sys
 
 app = APIRouter(
     prefix="/webhooks/ls",
