@@ -1,6 +1,7 @@
 from fastapi import APIRouter, UploadFile, File
 
 import app.storage as storage
+import app.utils as utils
 # from app.models import LabelUpload
 
 app = APIRouter(
@@ -30,6 +31,18 @@ async def upload_image(image: UploadFile = File(...)):
     return {
         "filename":filename
     } 
+@app.post("/faceimage/")
+async def upload_face_image(image: UploadFile = File(...)):
+    data = storage.getBlobName(image.filename ,"mst",True )
+    output = UploadFile(filename=image.filename)
+    await utils.process_image_with_face(image, output, image)
+    filename = await storage.uploadImage(data["filename"], data["blob_name"], output)
+    
+    return {
+        "filename":filename
+    }
+
+
 # @app.post("/labels/")
 # async def upload_labels(label_upload: LabelUpload):
 #     _ = await storage.uploadLabels(label_upload)
