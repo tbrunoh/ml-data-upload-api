@@ -34,7 +34,7 @@ async def upload_image(image: UploadFile = File(...)):
 @app.post("/faceimage/")
 async def upload_face_image(image: UploadFile = File(...)):
     data = storage.getBlobName(image.filename ,"face_images",True )
-    output = UploadFile(filename=image.filename)
+    output = UploadFile(filename=image.filename,file=image.file)
     await utils.process_image_with_face(image, output, image)
     filename = await storage.uploadImage(data["filename"], data["blob_name"], output)
     
