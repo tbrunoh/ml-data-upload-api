@@ -18,6 +18,11 @@ def process_image_with_face(image_file: UploadFile, output_file: UploadFile, siz
             raise ValueError("Image not found or invalid image file")
         print(f"Image shape: {image.shape}")
 
+        # Ensure the image is in RGB format
+        if len(image.shape) == 3 and image.shape[2] == 3:
+            image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        print("Image converted to RGB format")
+
         # Load pre-trained face detector
         face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
         if face_cascade.empty():
@@ -25,7 +30,7 @@ def process_image_with_face(image_file: UploadFile, output_file: UploadFile, siz
         print("Haar cascade loaded successfully")
 
         # Convert to grayscale for face detection
-        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
         print(f"Grayscale image shape: {gray.shape}")
 
         # Detect faces
