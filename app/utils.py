@@ -10,10 +10,10 @@ def extract_image_filename(image_url: str, ext: str = "png"):
     return match.group(1) if match else "unknown"
 
 
-def process_image_with_face(image_file: UploadFile, output_file: UploadFile, size: int = 256):
+def process_image_with_face(image_bytes: bytes, size: int = 256) -> bytes:
     try:
-        # Read the image from the uploaded file
-        file_bytes = np.frombuffer(image_file.file.read(), np.uint8)
+        # Read the image from the bytes array
+        file_bytes = np.frombuffer(image_bytes, np.uint8)
         image = cv2.imdecode(file_bytes, cv2.IMREAD_COLOR)
         if image is None:
             raise ValueError("Image not found or invalid image file")
@@ -63,23 +63,14 @@ def process_image_with_face(image_file: UploadFile, output_file: UploadFile, siz
         resized_image = cv2.resize(cropped_image, (size, size))
         print(f"Resized image shape: {resized_image.shape}")
 
-        # Save the processed image to the output file
+        # Encode the processed image to PNG format
         success, encoded_image = cv2.imencode('.png', resized_image)
         if not success:
             raise RuntimeError("Failed to encode the processed image")
         print("Image encoded successfully")
 
-        # Write the encoded image to a BytesIO object
-        image_stream = io.BytesIO(encoded_image.tobytes())
-
-        # Reset the file pointer of the output file
-        output_file.file.seek(0)
-        # Write the image stream to the output file
-        output_file.file.write(image_stream.getvalue())
-        
-        # Reset the file pointers of the uploaded files
-        image_file.file.seek(0)
-        output_file.file.seek(0)
+        # Return the encoded image as bytes
+        return encoded_image.tobytes()
 
     except Exception as e:
         print(f"Error processing image: {e}")
