@@ -2,7 +2,7 @@
 from fastapi import FastAPI, HTTPException, status,APIRouter, Request
 from label_studio_sdk import Annotation, Task
 import logging
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
 import app.utils as utils
 import requests
 import os
