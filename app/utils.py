@@ -10,7 +10,7 @@ def extract_image_filename(image_url: str, ext: str = "png"):
     return match.group(1) if match else "unknown"
 
 
-def process_image_with_face(image_bytes: bytes, size: int = 256) -> bytes:
+def process_image_with_face(image_bytes: bytes) -> bytes:
     try:
         # Read the image from the bytes array
         file_bytes = np.frombuffer(image_bytes, np.uint8)
@@ -57,6 +57,10 @@ def process_image_with_face(image_bytes: bytes, size: int = 256) -> bytes:
         # Check if the cropped image has valid dimensions
         if cropped_image.shape[0] <= 0 or cropped_image.shape[1] <= 0:
             raise ValueError(f"Invalid cropped image dimensions: {cropped_image.shape}")
+
+        # Automatically determine the size as the smaller dimension of the cropped image
+        size = min(cropped_image.shape[:2])
+        print(f"Automatically determined size: {size}")
 
         # Resize the cropped image to a square
         print(f"Resizing cropped image to size: {size}x{size}")
