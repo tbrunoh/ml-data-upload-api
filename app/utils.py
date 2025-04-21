@@ -2,9 +2,10 @@ import re
 import cv2
 from fastapi import UploadFile
 import numpy as np
+import io
 
 
-def extract_image_filename(image_url: str, ext:str = "png"):
+def extract_image_filename(image_url: str, ext: str = "png"):
     match = re.search(rf"^[^-]+-(-*\d+)\.{ext}", image_url)
     return match.group(1) if match else "unknown"
 
@@ -52,6 +53,10 @@ def process_image_with_face(image_file: UploadFile, output_file: UploadFile, siz
         # Validate the cropped image
         if cropped_image.size == 0:
             raise ValueError("Cropped image is empty. Check the face detection and cropping logic.")
+        
+        # Check if the cropped image has valid dimensions
+        if cropped_image.shape[0] <= 0 or cropped_image.shape[1] <= 0:
+            raise ValueError(f"Invalid cropped image dimensions: {cropped_image.shape}")
 
         # Resize the cropped image to a square
         print(f"Resizing cropped image to size: {size}x{size}")
@@ -64,8 +69,14 @@ def process_image_with_face(image_file: UploadFile, output_file: UploadFile, siz
             raise RuntimeError("Failed to encode the processed image")
         print("Image encoded successfully")
 
-        output_file.file.write(encoded_image.tobytes())
+        # Write the encoded image to a BytesIO object
+        image_stream = io.BytesIO(encoded_image.tobytes())
 
+        # Reset the file pointer of the output file
+        output_file.file.seek(0)
+        # Write the image stream to the output file
+        output_file.file.write(image_stream.getvalue())
+        
         # Reset the file pointers of the uploaded files
         image_file.file.seek(0)
         output_file.file.seek(0)
