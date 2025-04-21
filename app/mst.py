@@ -36,7 +36,8 @@ async def upload_face_image(image: UploadFile = File(...)):
     data = storage.getBlobName(image.filename ,"face_images",True )
     file_content = await image.read()
     bytes = utils.process_image_with_face(file_content)
-    output = UploadFile(filename=image.filename, file=bytes)
+    import io
+    output = UploadFile(filename=image.filename, file=io.BytesIO(bytes))
     filename = await storage.uploadImage(data["filename"], data["blob_name"], output)
     
     return {
