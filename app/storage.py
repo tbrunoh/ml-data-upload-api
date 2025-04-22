@@ -30,7 +30,7 @@ except Exception:
 def getBlobName(filename: str, prefix: str = IMAGE_FOLDER, useFilename:bool=False) -> dict:
     ext = os.path.splitext(filename)[1]
     if useFilename:
-        unique_filename = filename
+        unique_filename = filename.replace(" ", "").lower()
     else:
         unique_filename = f"{uuid.uuid4()}{ext}"
     
