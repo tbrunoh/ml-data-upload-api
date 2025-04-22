@@ -67,8 +67,17 @@ def process_image_with_face(image_bytes: bytes) -> bytes:
         resized_image = cv2.resize(cropped_image, (size, size))
         print(f"Resized image shape: {resized_image.shape}")
 
+        # Add padding to make the image 512x512
+        target_size = 512
+        top = (target_size - resized_image.shape[0]) // 2
+        bottom = target_size - resized_image.shape[0] - top
+        left = (target_size - resized_image.shape[1]) // 2
+        right = target_size - resized_image.shape[1] - left
+        padded_image = cv2.copyMakeBorder(resized_image, top, bottom, left, right, cv2.BORDER_CONSTANT, value=[0, 0, 0])
+        print(f"Padded image shape: {padded_image.shape}")
+
         # Encode the processed image to PNG format
-        success, encoded_image = cv2.imencode('.png', resized_image)
+        success, encoded_image = cv2.imencode('.png', padded_image)
         if not success:
             raise RuntimeError("Failed to encode the processed image")
         print("Image encoded successfully")
