@@ -30,7 +30,7 @@ logger = logging.getLogger(__name__)
 
 # Initialize FastAPI app
 app = FastAPI(
-    title="Melanin Luxe Training Data APIs",
+    title="Inclusive Skin AI Training Data APIs",
     description="APIs for managing training data",
     version="1.0.0",
 )
